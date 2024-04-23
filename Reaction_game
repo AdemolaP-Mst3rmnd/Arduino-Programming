@@ -1,0 +1,48 @@
+int gameState = 1;  // 0=waiting for reset 1=game on
+long int t_wait; //random delay time
+long int t_init;
+long int t0;
+
+void setup() {
+ attachInterrupt(digitalPinToInterrupt(2), buttonPush, FALLING);
+ pinMode(2, INPUT_PULLUP);
+ Serial.begin(9600);
+}
+
+void loop() {
+  switch(gameState){
+    case 0:   //initialise game
+        t_wait = random(5000,10000);  //t_wait will be a random number representing 5-10 seconds
+        t_init = millis();  //the starting time reference
+        Serial.println("WAIT");
+        gameState = 1;
+        break;
+   case 1:  //display PUSH if random delay time has elapsed
+        if ( (millis() - t_init) > t_wait){
+          Serial.println("GO!");
+          t0 = millis();
+          gameState = 2;  //waiting for button to be pressed
+        }
+        break;
+   default:   //do nothing if in gameState 2
+       break; 
+   }
+}
+
+void buttonPush(){
+  switch(gameState){
+    case 1:  //button pressed while still in random delay period
+        if( (millis()-t_init) > 500){   //allow 500 ms for the button to be released from previous try
+           Serial.println("TOO EARLY!");
+           gameState = 0;
+        }
+
+        break;
+   case 2:  //legitimate button press, so display reaction tiime
+        Serial.println((String) "Reaction time: " + (millis() - t0) + " ms");
+        gameState = 0;
+        break;
+   default:  //button push has no effect if gameState is 0 
+       break; 
+   }
+}
