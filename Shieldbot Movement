@@ -1,0 +1,58 @@
+#include <Shieldbot.h>
+Shieldbot shieldbot = Shieldbot();
+// Declaring Variables
+int lw = A4;  // Left Wheel Output Pin
+int rw = A5;  // Right Wheel Output Pin
+int RWS = 20;  // Right Wheel Speed
+int LWS = 20;   // Left Wheel Speed
+int lblack = 0;  // Count left black
+int rblack = 0;  // Count right black
+int lwhite = 0;  // Count left white
+int rwhite = 0;  // Count right white
+double pi = 3.14159;
+unsigned long sensorValueL;  // Sensor Value Left Black
+unsigned long sensorValueR;  // Sensor Value Right Black
+
+// Output Screen elements:
+String w = "White:";
+String b = "Black:";
+String r = "Right:";
+String l = "Left:";
+String c = ":";
+String s = " ";
+String t = "  ";
+String d = "Distance";
+//Void Setup
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+}
+
+//Void Loop
+void loop() {
+  wait();
+  delay(1000);
+  turnleft();
+  delay(1930);
+  wait();
+  delay(1000);
+
+
+}
+
+void straight() {
+  shieldbot.drive(LWS, RWS);
+}
+void wait(){
+  shieldbot.stop();
+}
+
+void turnleft(){
+  shieldbot.drive(-21,27);
+}
+
+void turnright(){
+  shieldbot.drive(20,-30);
+}
