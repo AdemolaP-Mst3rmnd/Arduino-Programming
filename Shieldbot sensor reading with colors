@@ -1,0 +1,72 @@
+#include <Shieldbot.h> 
+Shieldbot shieldbot = Shieldbot(); 
+                                           // Declaring Variables 
+int lw = A0;  // Left Wheel Output Pin 
+int rw = A1;  // Right Wheel Output Pin 
+int RWS = 20;  // Right Wheel Speed 
+int LWS = 20;   // Left Wheel Speed 
+int lblack = 0;  // Count left black 
+int rblack = 0;  // Count right black 
+int lwhite = 0;  // Count left white 
+int rwhite = 0;  // Count right white 
+unsigned long sensorValueLB;  // Sensor Value Left Black 
+unsigned long sensorValueRB;  // Sensor Value Right Black 
+unsigned long sensorValueLW;  // Sensor Value Left White 
+unsigned long sensorValueRW;  // Sensor Value Right White 
+// Output Screen elements: 
+String w = "White:";    
+String b = "Black:"; 
+String r = "Right:"; 
+String l = "Left:"; 
+String c = ":"; 
+String s = " "; 
+String t = "  "; 
+                                           //Void Setup 
+
+void setup() { 
+  Serial.begin(9600);  
+   pinMode(A0, INPUT); 
+   pinMode(A1, INPUT); 
+} 
+
+                                           //Void Loop 
+void loop() {   
+straight();
+                                            //Sensor Left Black 
+sensorValueLB = analogRead(A0); 
+  if (sensorValueLB > 300){    
+    lblack++; 
+    while (analogRead(A0)>300){}    
+  } 
+                                            //Sensor Left White 
+    sensorValueLW = analogRead(A0); 
+  if (sensorValueLW < 800){    
+    lwhite++; 
+    while (analogRead(A0)<800){}    
+  } 
+  else { 
+    analogRead(A0); 
+  } 
+                                            //Sensor Right Black 
+  sensorValueRB = analogRead(A1); 
+  if (sensorValueRB >300){    
+    rblack++; 
+    while (analogRead(A1)>300){}    
+  } 
+  else { 
+    analogRead(A1); 
+  } 
+                                             //Sensor Right White 
+  sensorValueRW = analogRead(A1); 
+  if (sensorValueRW < 800){    
+    rwhite++; 
+    while (analogRead(A1)<800){}    
+  } 
+
+                                            //Serial Print 
+                                      
+ Serial.println(sensorValueLW + s + sensorValueRW + t + l + LWS + s + r + RWS + t + b + lblack + c + rblack + s + w + lwhite + c + rwhite); 
+}
+   void straight(){ 
+    shieldbot.drive(LWS, RWS); 
+   }
